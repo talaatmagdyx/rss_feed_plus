@@ -1,0 +1,27 @@
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+
+# rspec failure tracking
+.rspec_status
+
+# rspec failure tracking
+.idea
+*.gem
+coverage/*
+Gemfile.lock
+*~
+.bundle
+.rvmrc
+log/*
+measurement/*
+pkg/*
+.DS_Store
+.env
+spec/dummy/tmp/*
+spec/dummy/log/*.log
