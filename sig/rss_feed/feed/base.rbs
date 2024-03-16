@@ -1,0 +1,18 @@
+module RssFeed
+  module Feed
+    class Base
+      @document: Nokogiri::XML::Document
+
+      attr_reader document: Nokogiri::XML::Document
+
+      def parser: -> Nokogiri::XML::Document
+
+      private
+
+      def detect_feed_type: -> String
+
+
+      def execute_method: -> String
+    end
+  end
+end

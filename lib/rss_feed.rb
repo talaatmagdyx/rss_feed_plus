@@ -3,6 +3,5 @@
 require_relative 'rss_feed/version'
 
 module RssFeed
-  class Error < StandardError; end
-  # Your code goes here...
+  autoload :Parser, 'rss_feed/parser'
 end

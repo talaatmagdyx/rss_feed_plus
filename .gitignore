@@ -25,3 +25,4 @@ pkg/*
 .env
 spec/dummy/tmp/*
 spec/dummy/log/*.log
+.gem_rbs_collection

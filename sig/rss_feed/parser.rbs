@@ -1,0 +1,17 @@
+module RssFeed
+  class Parser
+    @feed_urls: Array[String]
+
+    attr_reader feed_urls: Array[String]
+
+    def parse: -> Hash[Symbol, Hash[Symbol, String] | Array[Hash[Symbol, Hash[Symbol, String]]]]
+
+    private
+
+    def extract_channel_info: (channel: Feed::Channel)-> Hash[Symbol, Hash[Symbol, String]]
+
+    def extract_item_info: (items: Feed::Item)-> Array[Hash[Symbol, Hash[Symbol, String]]]
+
+    def fetch_and_parse_xml: -> Nokogiri::XML::Document
+  end
+end

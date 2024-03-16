@@ -1,0 +1,13 @@
+module RssFeed
+  module Feed
+    class Item
+      TAGS: Array[Symbol]
+
+      def atom: -> String
+
+      def parse: -> Nokogiri::XML::NodeSet
+
+      def rss: -> String
+    end
+  end
+end

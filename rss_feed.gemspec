@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
 
   spec.summary = 'A simple RSS parser gem for Ruby'
   spec.description = <<-DESC
-    #{spec.name} is a Ruby gem designed to simplify the process of parsing RSS feeds in Ruby applications.#{' '}
-    It provides a straightforward interface for fetching RSS feeds from URLs and extracting relevant information#{' '}
+    #{spec.name} is a Ruby gem designed to simplify the process of parsing RSS feed in Ruby applications.#{' '}
+    It provides a straightforward interface for fetching RSS feed from URLs and extracting relevant information#{' '}
     such as titles, links, descriptions, publication dates, and authors.#{' '}
     With #{spec.name}, you can quickly integrate RSS feed parsing functionality into your Ruby projects,#{' '}
     making it easy to work with syndicated content from various sources.
