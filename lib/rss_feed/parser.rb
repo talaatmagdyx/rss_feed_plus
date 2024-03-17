@@ -20,7 +20,7 @@ module RssFeed
       items = RssFeed::Feed::Item.new(document)
       item_info = extract_item_info(items)
 
-      { channel: channel_info, items: item_info }
+      { 'channel' => channel_info, 'items' => item_info }
     end
 
     private
@@ -34,7 +34,12 @@ module RssFeed
       channel_info = {}
       channel_tags = channel.parse
       channel.class::TAGS.each do |tag|
-        channel_info[tag] = Namespace.access_tag(tag, channel_tags)
+        tag = tag.to_s
+        value = RssFeed::Feed::Namespace.access_tag(tag, channel_tags)
+        puts '==========================='
+        p value
+        puts '==========================='
+        channel_info[tag] = value if value
       end
       channel_info
     end
@@ -44,7 +49,9 @@ module RssFeed
       items.parse.each do |item|
         item_data = {}
         items.class::TAGS.each do |tag|
-          item_data[tag] = Namespace.access_tag(tag, item)
+          tag = tag.to_s
+          value = RssFeed::Feed::Namespace.access_tag(tag, item)
+          item_data[tag] = value if value
         end
         item_info << item_data
       end
