@@ -4,7 +4,7 @@ module RssFeed
 
     attr_reader feed_urls: Array[String]
 
-    def parse: -> Hash[Symbol, Hash[Symbol, String] | Array[Hash[Symbol, Hash[Symbol, String]]]]
+    def parse: -> Hash[String, Hash[Symbol, Hash[Symbol, String]] | Array[Hash[Symbol, Hash[Symbol, String]]]]
 
     private
 

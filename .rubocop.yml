@@ -5,3 +5,5 @@ require:
 AllCops:
   TargetRubyVersion: 2.6
   NewCops: enable
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: never

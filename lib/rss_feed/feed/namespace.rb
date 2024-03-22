@@ -1,3 +1,5 @@
+require "cgi"
+
 module RssFeed
   module Feed
     class Namespace
@@ -14,12 +16,9 @@ module RssFeed
       class << self
         def access_tag(tag, doc)
           tag = tag.to_s
-          p tag.class
-          p tag
-          p namespace(tag)
-          puts ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;'
           if tag.include?(':')
             element = doc.at_xpath("//#{tag.split('#').first}", namespace(tag))
+
             tag.include?('#') ? element&.attribute(tag.split('#').last)&.value : element
           else
             doc.xpath(tag).to_s
@@ -29,6 +28,22 @@ module RssFeed
         def namespace(tag)
           namespace_key = tag.split(':').first
           { namespace_key.to_s => NAMESPACES[namespace_key] }.compact
+        end
+
+
+        def remove_html_tags(content)
+          if /([^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]%)/.match?(content)
+            CGI.unescape(content)
+          else
+            content
+          end.gsub(/(<!\[CDATA\[|\]\]>)/, "").strip.gsub(/<[^>]+>/, '')
+        end
+
+        def has_nested_elements?(node)
+          return false unless node
+
+          return true if node.children.any? { |child| child.element? }
+          false
         end
       end
 

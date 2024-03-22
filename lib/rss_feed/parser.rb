@@ -1,9 +1,10 @@
 require 'nokogiri'
 require 'open-uri'
+
 require_relative 'feed/channel'
 require_relative 'feed/item'
 require_relative 'feed/namespace'
-
+require_relative '../rss_feed/object'
 module RssFeed
   class Parser
     attr_reader :feed_urls
@@ -26,7 +27,7 @@ module RssFeed
     private
 
     def fetch_and_parse_xml(url)
-      rss_data = URI.open(url)
+      rss_data = URI.parse(url).open
       Nokogiri::XML(rss_data)
     end
 
@@ -36,10 +37,11 @@ module RssFeed
       channel.class::TAGS.each do |tag|
         tag = tag.to_s
         value = RssFeed::Feed::Namespace.access_tag(tag, channel_tags)
-        puts '==========================='
-        p value
-        puts '==========================='
-        channel_info[tag] = value if value
+
+        if value.present?
+          clean_value = RssFeed::Feed::Namespace.remove_html_tags(value)
+          channel_info[tag] = clean_value if clean_value.present?
+        end
       end
       channel_info
     end
@@ -51,7 +53,10 @@ module RssFeed
         items.class::TAGS.each do |tag|
           tag = tag.to_s
           value = RssFeed::Feed::Namespace.access_tag(tag, item)
-          item_data[tag] = value if value
+          if value.present?
+            clean_value = RssFeed::Feed::Namespace.remove_html_tags(value)
+            item_data[tag] = clean_value if clean_value.present?
+          end
         end
         item_info << item_data
       end
