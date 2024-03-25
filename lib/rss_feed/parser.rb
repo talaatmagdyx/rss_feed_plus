@@ -32,35 +32,32 @@ module RssFeed
     end
 
     def extract_channel_info(channel)
-      channel_info = {}
       channel_tags = channel.parse
-      channel.class::TAGS.each do |tag|
-        tag = tag.to_s
-        value = RssFeed::Feed::Namespace.access_tag(tag, channel_tags)
-
-        if value.present?
-          clean_value = RssFeed::Feed::Namespace.remove_html_tags(value)
-          channel_info[tag] = clean_value if clean_value.present?
-        end
-      end
-      channel_info
+      extract_info(channel, channel_tags)
     end
 
     def extract_item_info(items)
       item_info = []
       items.parse.each do |item|
-        item_data = {}
-        items.class::TAGS.each do |tag|
-          tag = tag.to_s
-          value = RssFeed::Feed::Namespace.access_tag(tag, item)
-          if value.present?
-            clean_value = RssFeed::Feed::Namespace.remove_html_tags(value)
-            item_data[tag] = clean_value if clean_value.present?
-          end
-        end
-        item_info << item_data
+        item_info << extract_info(items, item)
       end
       item_info
+    end
+
+    def extract_info(feed, feed_parse)
+      item_data = {}
+      feed.class::TAGS.each do |tag|
+        tag = tag.to_s
+        puts "tag: #{tag}"
+        value = RssFeed::Feed::Namespace.access_tag(tag, feed_parse)
+        puts "value: #{value}"
+        if value.present?
+          clean_value = RssFeed::Feed::Namespace.remove_html_tags(value)
+          puts "clean_value: #{clean_value}"
+          item_data[tag] = clean_value if clean_value.present?
+        end
+      end
+      item_data
     end
   end
 end

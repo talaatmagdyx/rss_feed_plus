@@ -10,6 +10,8 @@ module RssFeed
 
     def extract_channel_info: (channel: Feed::Channel)-> Hash[Symbol, Hash[Symbol, String]]
 
+    def extract_info: (feed: Feed::Item | Feed::Channel)-> Hash[Symbol, Hash[Symbol, String]]
+
     def extract_item_info: (items: Feed::Item)-> Array[Hash[Symbol, Hash[Symbol, String]]]
 
     def fetch_and_parse_xml: -> Nokogiri::XML::Document

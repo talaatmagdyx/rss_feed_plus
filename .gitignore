@@ -12,6 +12,7 @@
 
 # rspec failure tracking
 .idea
+.idea/misc.xml
 *.gem
 coverage/*
 Gemfile.lock

@@ -1,4 +1,5 @@
-require "cgi"
+require 'cgi'
+require_relative '../object'
 
 module RssFeed
   module Feed
@@ -15,13 +16,16 @@ module RssFeed
 
       class << self
         def access_tag(tag, doc)
-          tag = tag.to_s
           if tag.include?(':')
             element = doc.at_xpath("//#{tag.split('#').first}", namespace(tag))
 
             tag.include?('#') ? element&.attribute(tag.split('#').last)&.value : element
           else
-            doc.xpath(tag).to_s
+            doc = doc.xpath(tag)
+            puts "doc class: #{doc.class}"
+            puts doc
+            puts "doc: #{has_nested_elements?(doc)}"
+            doc.to_s
           end
         end
 
@@ -36,13 +40,14 @@ module RssFeed
             CGI.unescape(content)
           else
             content
-          end.gsub(/(<!\[CDATA\[|\]\]>)/, "").strip.gsub(/<[^>]+>/, '')
+          end.gsub(/(<!\[CDATA\[|\]\]>)/, '').strip.gsub(/<[^>]+>/, '')
         end
 
         def has_nested_elements?(node)
-          return false unless node
+          return false if node.blank? || node.to_s == 'NaN'
 
-          return true if node.children.any? { |child| child.element? }
+          return true if node.children.any?(&:element?)
+
           false
         end
       end
