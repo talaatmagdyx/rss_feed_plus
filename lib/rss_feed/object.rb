@@ -4,6 +4,6 @@ class Object
   end
 
   def blank?
-    respond_to?(:empty?) ? empty? : !self
+    respond_to?(:empty?) ? (empty? || self == 'NaN') : !self
   end
 end
