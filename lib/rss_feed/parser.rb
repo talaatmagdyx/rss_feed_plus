@@ -46,18 +46,37 @@ module RssFeed
 
     def extract_info(feed, feed_parse)
       item_data = {}
+
       feed.class::TAGS.each do |tag|
         tag = tag.to_s
-        puts "tag: #{tag}"
         value = RssFeed::Feed::Namespace.access_tag(tag, feed_parse)
+        puts "===================="
         puts "value: #{value}"
-        if value.present?
-          clean_value = RssFeed::Feed::Namespace.remove_html_tags(value)
-          puts "clean_value: #{clean_value}"
-          item_data[tag] = clean_value if clean_value.present?
-        end
+        puts "tag: #{tag}"
+        puts "===================="
+        next unless value[:docs].present?
+
+        item_data[tag] = value[:nested] ? extract_nested_data(feed_parse.xpath(tag)) : extract_clean_value(value[:docs])
       end
+
       item_data
     end
+
+    def extract_clean_value(docs)
+      clean_value = RssFeed::Feed::Namespace.remove_html_tags(docs)
+      clean_value if clean_value.present?
+    end
+
+    def extract_nested_data(nodes)
+      nodes.each_with_object({}) do |node, nested_data|
+        node.children.each do |child|
+          child_value = RssFeed::Feed::Namespace.remove_html_tags(child.text)
+          nested_data[child.name.to_sym] = child_value if child_value.present?
+        end
+      end
+    end
+
+
+
   end
 end

@@ -1,24 +1,24 @@
 require 'rss_feed'
+require 'nokogiri'
+require 'open-uri'
 
 url = ['https://abcnews.go.com/abcnews/usheadlines']
 
-p RssFeed::Parser.new(url).parse
 
-# require 'nokogiri'
-# require 'open-uri'
-#
-# rss_url = 'https://gorails.com/episodes.rss'
-# rss_data = URI.open(rss_url)
-# doc = Nokogiri::XML(rss_data)
-#
-# # Define namespaces
-# # namespaces = {
-# #   'itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd'
-# # }
-#
-# # Retrieve itunes:author using XPath with namespace
-# itunes_author = doc.at_xpath('//itunes:author')
-#
-# # Print the content of itunes:author element
-# puts itunes_author.text if itunes_author
+def fetch_and_parse_xml(url)
+  rss_data = URI.parse(url).open
+  Nokogiri::XML(rss_data)
+end
+# p RssFeed::Parser.new(url).parse
+doc = fetch_and_parse_xml(url.first)
+doc = doc.at_xpath('//item')
+thumbnails = doc.xpath('//media:thumbnail', 'media' => 'http://search.yahoo.com/mrss/')
+
+thumbnails.each do |thumbnail|
+  thumbnail.attributes.each do |name, value|
+    puts "#{name}: #{value}"
+  end
+end
+
+
 

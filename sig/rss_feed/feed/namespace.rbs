@@ -1,0 +1,15 @@
+module RssFeed
+  module Feed
+    class Namespace
+      NAMESPACES: Hash[String, String]
+
+      def self.access_tag: (tag: String, doc: Nokogiri::XML::NodeSet)-> Hash[Symbol, bool]
+
+      def self.namespace: (tag: String)-> Hash[String, String]
+
+      def self.nested_elements?: (node: Nokogiri::XML::NodeSet) -> bool
+
+      def self.remove_html_tags: (content: Nokogiri::XML::NodeSet)-> String
+    end
+  end
+end

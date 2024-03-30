@@ -19,13 +19,11 @@ module RssFeed
           if tag.include?(':')
             element = doc.at_xpath("//#{tag.split('#').first}", namespace(tag))
 
-            tag.include?('#') ? element&.attribute(tag.split('#').last)&.value : element
+            docs = tag.include?('#') ? element&.attribute(tag.split('#').last)&.value : element
+            { docs: docs.to_s, nested: false }
           else
             doc = doc.xpath(tag)
-            puts "doc class: #{doc.class}"
-            puts doc
-            puts "doc: #{has_nested_elements?(doc)}"
-            doc.to_s
+            { docs: doc.to_s, nested: nested_elements?(doc) }
           end
         end
 
@@ -34,16 +32,15 @@ module RssFeed
           { namespace_key.to_s => NAMESPACES[namespace_key] }.compact
         end
 
-
         def remove_html_tags(content)
-          if /([^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]%)/.match?(content)
+          if %r{([^-_.!~*'()a-zA-Z\d;/?:@&=+$,\[\]]%)}.match?(content)
             CGI.unescape(content)
           else
             content
           end.gsub(/(<!\[CDATA\[|\]\]>)/, '').strip.gsub(/<[^>]+>/, '')
         end
 
-        def has_nested_elements?(node)
+        def nested_elements?(node)
           return false if node.blank? || node.to_s == 'NaN'
 
           return true if node.children.any?(&:element?)
