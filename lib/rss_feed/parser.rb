@@ -76,8 +76,6 @@ module RssFeed
       tag_item['attributes'] = attributes if attributes.present?
     end
 
-
-
     def extract_clean_value(docs)
       clean_value = RssFeed::Feed::Namespace.remove_html_tags(docs)
       clean_value if clean_value.present?
@@ -101,7 +99,5 @@ module RssFeed
         attributes_hash
       end
     end
-
-
   end
 end
