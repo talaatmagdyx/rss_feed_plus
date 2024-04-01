@@ -48,34 +48,35 @@ module RssFeed
       item_data = {}
 
       feed.class::TAGS.each do |tag|
-        tag = tag.to_s
-        value = RssFeed::Feed::Namespace.access_tag(tag, feed_parse)
-        puts '===================='
-        puts "value: #{value}"
-        puts "tag: #{tag}"
-        puts '===================='
-        next unless value[:text].present?
+        tag_data = extract_tag_data(tag, feed_parse)
+        next unless tag_data[:text].present?
 
-        items = value[:nested_elements] ? extract_nested_data(value[:docs]) : extract_clean_value(value[:text])
-        if items.present?
-          item_data[tag] ||= {} 
-          item_data[tag][:value] = items
-        end
-        attributes = value[:nested_attributes] ? extract_attributes(value[:docs]) : nil
-        puts "====================#{attributes}====================}"
-        if attributes.present?
-          puts "item_data[tag]: #{item_data[tag]}"
-          item_data[tag] ||= {}
-          if item_data[tag]['attributes'].present?
-            item_data[tag]['attributes'] + attributes
-          else
-            item_data[tag]['attributes'] = attributes
-          end
-        end
+        items = extract_items(tag_data)
+        next unless items.present?
+
+        item_data[tag] = { 'values' => items }
+        add_attributes(item_data[tag], tag_data)
       end
 
       item_data
     end
+
+    def extract_tag_data(tag, feed_parse)
+      value = RssFeed::Feed::Namespace.access_tag(tag, feed_parse)
+      value[:nested_attributes] = extract_attributes(value[:docs]) if value[:nested_attributes]
+      value
+    end
+
+    def extract_items(tag_data)
+      tag_data[:nested_elements] ? extract_nested_data(tag_data[:docs]) : extract_clean_value(tag_data[:text])
+    end
+
+    def add_attributes(tag_item, tag_data)
+      attributes = tag_data[:nested_attributes]
+      tag_item['attributes'] = attributes if attributes.present?
+    end
+
+
 
     def extract_clean_value(docs)
       clean_value = RssFeed::Feed::Namespace.remove_html_tags(docs)
