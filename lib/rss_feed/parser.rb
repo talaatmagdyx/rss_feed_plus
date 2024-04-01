@@ -57,7 +57,10 @@ module RssFeed
         next unless value[:text].present?
 
         items = value[:nested_elements] ? extract_nested_data(value[:docs]) : extract_clean_value(value[:text])
-        item_data[tag] = items if items.present?
+        if items.present?
+          item_data[tag] ||= {} 
+          item_data[tag][:value] = items
+        end
         attributes = value[:nested_attributes] ? extract_attributes(value[:docs]) : nil
         puts "====================#{attributes}====================}"
         if attributes.present?
@@ -90,10 +93,12 @@ module RssFeed
 
     def extract_attributes(node)
       node.map do |thumbnail|
-        thumbnail.attributes.map do |name, value|
-          { name.to_s => value.to_s }
+        attributes_hash = {}
+        thumbnail.attributes.each do |name, value|
+          attributes_hash[name.to_s] = value.to_s
         end
-      end.flatten
+        attributes_hash
+      end
     end
 
 
