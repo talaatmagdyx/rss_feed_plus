@@ -3,7 +3,7 @@ require_relative 'base'
 module RssFeed
   module Feed
     class Item < Base
-      TAGS = %i[
+      TAGS = %w[
         id
         title link link+alternate link+self link+edit link+replies
         author contributor

@@ -3,7 +3,7 @@ require_relative 'base'
 module RssFeed
   module Feed
     class Channel < Base
-      TAGS = %i[
+      TAGS = %w[
         id
         title subtitle link
         description

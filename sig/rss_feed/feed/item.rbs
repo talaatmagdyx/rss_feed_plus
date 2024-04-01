@@ -1,7 +1,7 @@
 module RssFeed
   module Feed
     class Item
-      TAGS: Array[Symbol]
+      TAGS: Array[String]
 
       def atom: -> String
 

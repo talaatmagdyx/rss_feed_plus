@@ -1,17 +1,9 @@
 module RssFeed
   module Feed
     class Channel
-      TAGS: Array[Symbol]
-
-      @document: Nokogiri::XML::Document
-
-      attr_reader document: Nokogiri::XML::Document
-
-      def access_tag: (tag: String, doc: Nokogiri::XML::Document)-> string
+      TAGS: Array[String]
 
       def atom: -> String
-
-      def namespace: (tag: String) -> Hash[String, String]
 
       def parse: -> Nokogiri::XML::Node
 
