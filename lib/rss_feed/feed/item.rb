@@ -12,11 +12,10 @@ module RssFeed
         category guid
         trackback:ping trackback:about
         dc:creator dc:title dc:subject dc:rights dc:publisher
-        feedburner:origLink
-        media:content#url media:content#type media:content#height media:content#width media:content#duration
-        media:title media:thumbnail#url media:thumbnail#height media:thumbnail#width
-        media:credit media:credit#role
-        media:category media:category#scheme
+        feedburner:origLink media:content media:thumbnail
+        media:title
+        media:credit
+        media:category
       ].freeze
 
 

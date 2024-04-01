@@ -16,15 +16,9 @@ module RssFeed
 
       class << self
         def access_tag(tag, doc)
-          if tag.include?(':')
-            element = doc.at_xpath("//#{tag.split('#').first}", namespace(tag))
-
-            docs = tag.include?('#') ? element&.attribute(tag.split('#').last)&.value : element
-            { docs: docs.to_s, nested: false }
-          else
-            doc = doc.xpath(tag)
-            { docs: doc.to_s, nested: nested_elements?(doc) }
-          end
+          doc = doc.xpath(tag, namespace(tag))
+          nested_elements = nested_elements?(doc)
+          { text: doc.to_s, nested_elements: nested_elements, nested_attributes: nested_attributes?(doc), docs: doc }
         end
 
         def namespace(tag)
@@ -46,6 +40,12 @@ module RssFeed
           return true if node.children.any?(&:element?)
 
           false
+        end
+
+        def nested_attributes?(node)
+          return false if node.blank? || node.to_s == 'NaN'
+
+          node.any? { |thumbnail| !thumbnail.attributes.empty? }
         end
       end
 

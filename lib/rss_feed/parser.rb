@@ -50,13 +50,25 @@ module RssFeed
       feed.class::TAGS.each do |tag|
         tag = tag.to_s
         value = RssFeed::Feed::Namespace.access_tag(tag, feed_parse)
-        puts "===================="
+        puts '===================='
         puts "value: #{value}"
         puts "tag: #{tag}"
-        puts "===================="
-        next unless value[:docs].present?
+        puts '===================='
+        next unless value[:text].present?
 
-        item_data[tag] = value[:nested] ? extract_nested_data(feed_parse.xpath(tag)) : extract_clean_value(value[:docs])
+        items = value[:nested_elements] ? extract_nested_data(value[:docs]) : extract_clean_value(value[:text])
+        item_data[tag] = items if items.present?
+        attributes = value[:nested_attributes] ? extract_attributes(value[:docs]) : nil
+        puts "====================#{attributes}====================}"
+        if attributes.present?
+          puts "item_data[tag]: #{item_data[tag]}"
+          item_data[tag] ||= {}
+          if item_data[tag]['attributes'].present?
+            item_data[tag]['attributes'] + attributes
+          else
+            item_data[tag]['attributes'] = attributes
+          end
+        end
       end
 
       item_data
@@ -76,6 +88,13 @@ module RssFeed
       end
     end
 
+    def extract_attributes(node)
+      node.map do |thumbnail|
+        thumbnail.attributes.map do |name, value|
+          { name.to_s => value.to_s }
+        end
+      end.flatten
+    end
 
 
   end

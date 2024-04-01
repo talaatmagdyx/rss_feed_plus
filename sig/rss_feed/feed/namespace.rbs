@@ -3,7 +3,7 @@ module RssFeed
     class Namespace
       NAMESPACES: Hash[String, String]
 
-      def self.access_tag: (tag: String, doc: Nokogiri::XML::NodeSet)-> Hash[Symbol, bool]
+      def self.access_tag: (tag: String, doc: Nokogiri::XML::NodeSet)-> Hash[Symbol, bool | String ]
 
       def self.namespace: (tag: String)-> Hash[String, String]
 
