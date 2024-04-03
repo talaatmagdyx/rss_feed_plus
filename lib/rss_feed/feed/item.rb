@@ -2,7 +2,9 @@ require_relative 'base'
 
 module RssFeed
   module Feed
+    # The Item class represents an item in an RSS feed.
     class Item < Base
+      # List of commonly used tags in an RSS item.
       TAGS = %w[
         id
         title link link+alternate link+self link+edit link+replies
@@ -18,15 +20,19 @@ module RssFeed
         media:category
       ].freeze
 
-
+      # XPath expression for selecting the RSS item.
       def rss
         '//item'
       end
 
+      # XPath expression for selecting the Atom entry.
       def atom
         '//entry'
       end
 
+      # Parses the RSS item or Atom entry based on the detected feed type.
+      #
+      # @return [Nokogiri::XML::NodeSet] The parsed item or entry.
       def parse
         document.xpath(execute_method)
       end
