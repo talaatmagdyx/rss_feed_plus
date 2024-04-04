@@ -14,7 +14,7 @@ module RssFeed
     end
 
     def parse
-      document = fetch_and_parse_xml(feed_urls.first)
+      document = fetch_and_parse_xml(feed_urls)
       channel = RssFeed::Feed::Channel.new(document)
       channel_info = extract_channel_info(channel)
 
@@ -49,13 +49,23 @@ module RssFeed
 
       feed.class::TAGS.each do |tag|
         tag_data = extract_tag_data(tag, feed_parse)
-        next unless tag_data[:text].present?
+        next if tag_data[:text].blank? && tag_data[:nested_elements].blank? && tag_data[:nested_attributes].blank?
 
         items = extract_items(tag_data)
-        next unless items.present?
+        # if tag == 'media:thumbnail'
+        #   puts "items: #{items}"
+        #   puts "tags: #{tag}"
+        # end
 
-        item_data[tag] = { 'values' => items }
-        add_attributes(item_data[tag], tag_data)
+        next if items.blank? && tag_data[:nested_attributes].blank?
+
+        item_info = { 'values' => items }
+        # puts "tag: #{tag}"
+        # puts "item_info: #{item_info}"
+        # puts "tag_data: #{tag_data}"
+        # puts "=========================="
+        add_attributes(item_info, tag_data) # Add attributes to the item_info hash
+        item_data[tag] = item_info.compact
       end
 
       item_data
@@ -63,7 +73,7 @@ module RssFeed
 
     def extract_tag_data(tag, feed_parse)
       value = RssFeed::Feed::Namespace.access_tag(tag, feed_parse)
-      value[:nested_attributes] = extract_attributes(value[:docs]) if value[:nested_attributes]
+      value[:attributes] = extract_attributes(value[:docs]) if value[:nested_attributes]
       value
     end
 
@@ -72,8 +82,9 @@ module RssFeed
     end
 
     def add_attributes(tag_item, tag_data)
-      attributes = tag_data[:nested_attributes]
+      attributes = tag_data[:attributes]
       tag_item['attributes'] = attributes if attributes.present?
+
     end
 
     def extract_clean_value(docs)

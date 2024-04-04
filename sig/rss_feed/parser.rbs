@@ -2,14 +2,15 @@ module RssFeed
   class Parser
     @feed_urls: Array[String]
 
-    attr_reader feed_urls: Array[String]
+    attr_reader feed_url: Array[String]
+    attr_reader uri_parser: untyped
+    attr_reader xml_parser: Nokogiri | untyped
+
     def initialize: (feed_urls: Array[String]) -> void
 
-    def parse: -> Hash[String, Hash[Symbol, Hash[Symbol, String]] | Array[Hash[Symbol, Hash[Symbol, String]]]]
+    def parse: -> Hash[String, String | Hash[Symbol, Hash[Symbol, String]] | Array[Hash[Symbol, Hash[Symbol, String]]]]
 
     private
-
-    def add_attributes: (tag_item: Hash[String, String | Hash[Symbol, String]], tag_data: Hash[Symbol, String])-> Hash[Symbol, Hash[Symbol, String]]
 
     def extract_attributes: (node: Nokogiri::XML::NodeSet)-> Array[Hash[Symbol, Hash[Symbol, String]]]
 
@@ -25,8 +26,10 @@ module RssFeed
 
     def extract_nested_data: (nodes: Nokogiri::XML::NodeSet)-> Hash[Symbol, Hash[Symbol, String]]
 
-    def extract_tag_data: (tag: String, feed_parse: Nokogiri::XML::Document)-> untyped
+    def extract_tag_data: (tag: String, feed_parse: Nokogiri::XML::Document)-> Hash[Symbol, String | bool]
 
     def fetch_and_parse_xml: -> Nokogiri::XML::Document
+
+    def handle_error: (error: string)-> void
   end
 end

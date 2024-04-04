@@ -3,13 +3,19 @@ module RssFeed
     class Namespace
       NAMESPACES: Hash[String, String]
 
-      def self.access_tag: (tag: String, doc: Nokogiri::XML::NodeSet)-> Hash[Symbol, bool | String ]
+      def self.access_tag: (tag: String, doc: Nokogiri::XML::NodeSet)-> Hash[Symbol, bool | String | Nokogiri::XML::Document ]
 
       def self.namespace: (tag: String)-> Hash[String, String]
+
+      def self.nested_attributes?:  (node: Nokogiri::XML::NodeSet) -> bool
 
       def self.nested_elements?: (node: Nokogiri::XML::NodeSet) -> bool
 
       def self.remove_html_tags: (content: Nokogiri::XML::NodeSet)-> String
+
+      private
+
+      def self.contains_html_tags?: (content: String)-> bool
     end
   end
 end

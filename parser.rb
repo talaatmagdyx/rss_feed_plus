@@ -2,8 +2,9 @@ require 'rss_feed'
 require 'nokogiri'
 require 'open-uri'
 
-url = ['https://feeds.nbcnews.com/nbcnews/public/news', 'https://abcnews.go.com/abcnews/usheadlines']
-
+url = 'https://feeds.nbcnews.com/nbcnews/public/news'
+url = 'https://abcnews.go.com/abcnews/usheadlines'
+url = "https://feeds.nbcnews.com/nbcnews/public/news"
 p RssFeed::Parser.new(url).parse
 
 # def fetch_and_parse_xml(url)
