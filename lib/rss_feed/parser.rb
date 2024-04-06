@@ -5,6 +5,7 @@ require_relative 'feed/channel'
 require_relative 'feed/item'
 require_relative 'feed/namespace'
 require_relative '../rss_feed/object'
+require_relative '../rss_feed/dynamic_object'
 module RssFeed
   class Parser
     attr_reader :feed_urls
@@ -60,10 +61,6 @@ module RssFeed
         next if items.blank? && tag_data[:nested_attributes].blank?
 
         item_info = { 'values' => items }
-        # puts "tag: #{tag}"
-        # puts "item_info: #{item_info}"
-        # puts "tag_data: #{tag_data}"
-        # puts "=========================="
         add_attributes(item_info, tag_data) # Add attributes to the item_info hash
         item_data[tag] = item_info.compact
       end

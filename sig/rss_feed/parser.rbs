@@ -8,7 +8,7 @@ module RssFeed
 
     def initialize: (feed_urls: Array[String]) -> void
 
-    def parse: -> Hash[String, String | Hash[Symbol, Hash[Symbol, String]] | Array[Hash[Symbol, Hash[Symbol, String]]]]
+    def parse: -> DynamicObject
 
     private
 

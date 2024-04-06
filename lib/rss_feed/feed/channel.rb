@@ -1,4 +1,5 @@
 require_relative 'base'
+require_relative '../object'
 
 module RssFeed
   module Feed
@@ -21,13 +22,19 @@ module RssFeed
 
       # XPath expression for selecting the RSS channel.
       def rss
+        return nil if document.blank?
+
         '//channel'
       end
 
       # XPath expression for selecting the Atom feed.
       def atom
+        return nil if document.blank?
+
         '//feed'
       end
+
+      alias feed atom
 
       # Parses the RSS channel or Atom feed based on the detected feed type.
       #
