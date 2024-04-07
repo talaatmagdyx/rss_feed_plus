@@ -1,5 +1,6 @@
 require 'rss_feed'
 require 'nokogiri'
+
 # require 'open-uri'
 #
 # # url = 'https://feeds.nbcnews.com/nbcnews/public/news'
@@ -14,7 +15,7 @@ url = 'https://www.ruby-lang.org/en/feeds/news.rss'
 feed_urls = 'https://feeds.nbcnews.com/nbcnews/public/news'
 xml_parser = Nokogiri
 uri_parser = URI
-timeout = 0.1
+timeout = 10
 
 # Initialize the Parser class with custom options
 parser = RssFeed::Parser.new(feed_urls, xml_parser: xml_parser, uri_parser: uri_parser, timeout: timeout)
