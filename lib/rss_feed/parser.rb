@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'socket'
 
 require_relative 'feed/channel'
 require_relative 'feed/item'
@@ -15,10 +16,12 @@ module RssFeed
     # Initialize the Parser with a list of feed URLs.
     #
     # @param feed_urls String The URLs of the RSS feeds to parse.
-    def initialize(feed_urls, xml_parser: Nokogiri, uri_parser: URI)
+    def initialize(feed_urls, options = {})
       @feed_urls = feed_urls
-      @xml_parser = xml_parser
-      @uri_parser = uri_parser
+      @xml_parser = options.fetch(:xml_parser, Nokogiri)
+      @uri_parser = options.fetch(:uri_parser, URI)
+      @timeout = options.fetch(:timeout, 10) # Default timeout: 10 seconds
+      @logger = options[:logger]
     end
 
     # Parse the RSS feeds and extract channel and item information.
@@ -41,13 +44,27 @@ module RssFeed
     #
     # @param url [String] The URL of the XML data.
     # @return [Nokogiri::XML::Document] The parsed XML document.
+    # def fetch_and_parse_xml(url)
+    #   rss_data = uri_parser.parse(url).open
+    #   @xml_parser::XML(rss_data)
+    # rescue StandardError => e
+    #   handle_error(e)
+    #   raise RssFetchError, "Failed to fetch or parse XML: #{e.message}"
+    # end
     def fetch_and_parse_xml(url)
-      rss_data = uri_parser.parse(url).open
+      rss_data = URI.parse(url).open(**uri_options)
       @xml_parser::XML(rss_data)
-    rescue StandardError => e
-      handle_error(e)
+    rescue SocketError, URI::InvalidURIError => e
       raise RssFetchError, "Failed to fetch or parse XML: #{e.message}"
+    rescue Timeout::Error => e
+      raise RssFetchError, "HTTP request timed out: #{e.message}"
     end
+
+    def uri_options
+      { open_timeout: @timeout, read_timeout: @timeout }.compact
+    end
+
+
 
     # Extract channel information from the parsed XML document.
     #
@@ -175,9 +192,16 @@ module RssFeed
     end
 
     def handle_error(error)
-      puts "Error occurred: #{error.message}"
-      # Log the error or perform any necessary actions
+      error_message = "Error occurred: #{error.message}"
+      @logger.present? ? @logger.error(error_message) : puts(error_message) # Fallback to puts if logger is not configured
     end
+
+    def configure_logger
+      @logger ||= Logger.new($stdout)
+      @logger.level = Logger::INFO
+    end
+
+
   end
 
   class RssFetchError < StandardError; end

@@ -2,6 +2,8 @@ module RssFeed
   class Parser
     @feed_urls: Array[String]
 
+    @logger: Logger
+
     attr_reader feed_urls: String
     attr_reader uri_parser: untyped
     attr_reader xml_parser: Nokogiri | untyped
@@ -13,6 +15,8 @@ module RssFeed
     private
 
     def add_attributes: -> void
+
+    def configure_logger: -> void
 
     def create_item_info: ->  Hash[String, untyped]
 
@@ -39,5 +43,7 @@ module RssFeed
     def skip_extraction?: -> bool
 
     def skip_items?: -> bool
+
+    def uri_options: -> Hash[Symbol | String, String | Integer]
   end
 end
