@@ -6,14 +6,22 @@ require_relative 'feed/item'
 require_relative 'feed/namespace'
 require_relative '../rss_feed/object'
 require_relative '../rss_feed/dynamic_object'
+
 module RssFeed
+  # The Parser class is responsible for parsing RSS feeds.
   class Parser
     attr_reader :feed_urls
 
+    # Initialize the Parser with a list of feed URLs.
+    #
+    # @param feed_urls [Array<String>] The URLs of the RSS feeds to parse.
     def initialize(feed_urls)
       @feed_urls = feed_urls
     end
 
+    # Parse the RSS feeds and extract channel and item information.
+    #
+    # @return [Hash] The parsed channel and item information.
     def parse
       document = fetch_and_parse_xml(feed_urls)
       channel = RssFeed::Feed::Channel.new(document)
@@ -27,16 +35,28 @@ module RssFeed
 
     private
 
+    # Fetch and parse XML data from the given URL.
+    #
+    # @param url [String] The URL of the XML data.
+    # @return [Nokogiri::XML::Document] The parsed XML document.
     def fetch_and_parse_xml(url)
       rss_data = URI.parse(url).open
       Nokogiri::XML(rss_data)
     end
 
+    # Extract channel information from the parsed XML document.
+    #
+    # @param channel [RssFeed::Feed::Channel] The channel object.
+    # @return [Hash] The extracted channel information.
     def extract_channel_info(channel)
       channel_tags = channel.parse
       extract_info(channel, channel_tags)
     end
 
+    # Extract item information from the parsed XML document.
+    #
+    # @param items [RssFeed::Feed::Item] The items object.
+    # @return [Array<Hash>] The extracted item information.
     def extract_item_info(items)
       item_info = []
       items.parse.each do |item|
@@ -45,6 +65,11 @@ module RssFeed
       item_info
     end
 
+    # Extract information from the XML document based on specified tags.
+    #
+    # @param feed [RssFeed::Feed::Channel/RssFeed::Feed::Item] The feed object.
+    # @param feed_parse [Hash] The parsed XML data.
+    # @return [Hash] The extracted information.
     def extract_info(feed, feed_parse)
       item_data = {}
 
@@ -61,40 +86,75 @@ module RssFeed
       item_data
     end
 
+    # Check if extraction of tag data should be skipped.
+    #
+    # @param tag_data [Hash] The tag data.
+    # @return [Boolean] True if extraction should be skipped, otherwise false.
     def skip_extraction?(tag_data)
       tag_data[:text].blank? && tag_data[:nested_elements].blank? && tag_data[:nested_attributes].blank?
     end
 
+    # Check if extraction of items should be skipped.
+    #
+    # @param items [Object] The items to check.
+    # @param nested_attributes [Boolean] Whether the items have nested attributes.
+    # @return [Boolean] True if extraction should be skipped, otherwise false.
     def skip_items?(items, nested_attributes)
       items.blank? && nested_attributes.blank?
     end
 
+    # Create item information hash.
+    #
+    # @param items [Object] The items data.
+    # @param tag_data [Hash] The tag data.
+    # @return [Hash] The item information.
     def create_item_info(items, tag_data)
       item_info = { 'values' => items }
       add_attributes(item_info, tag_data)
       item_info
     end
 
+    # Extract tag data from the XML document.
+    #
+    # @param tag [String] The tag to extract.
+    # @param feed_parse [Hash] The parsed XML data.
+    # @return [Hash] The extracted tag data.
     def extract_tag_data(tag, feed_parse)
       value = RssFeed::Feed::Namespace.access_tag(tag, feed_parse)
       value[:attributes] = extract_attributes(value[:docs]) if value[:nested_attributes]
       value
     end
 
+    # Extract items from the XML document.
+    #
+    # @param tag_data [Hash] The tag data.
+    # @return [Object] The extracted items.
     def extract_items(tag_data)
       tag_data[:nested_elements] ? extract_nested_data(tag_data[:docs]) : extract_clean_value(tag_data[:text])
     end
 
+    # Add attributes to the item information hash.
+    #
+    # @param tag_item [Hash] The item information hash.
+    # @param tag_data [Hash] The tag data.
     def add_attributes(tag_item, tag_data)
       attributes = tag_data[:attributes]
       tag_item['attributes'] = attributes if attributes.present?
     end
 
+    # Extract clean value from the XML document.
+    #
+    # @param docs [Object] The XML document.
+    # @return [String] The extracted clean value.
     def extract_clean_value(docs)
       clean_value = RssFeed::Feed::Namespace.remove_html_tags(docs)
       clean_value if clean_value.present?
     end
 
+    # Extract nested data from the XML document.
+    #
+    # @param nodes [Object] The XML nodes.
+    # @return [Hash] The extracted nested data.
     def extract_nested_data(nodes)
       nodes.each_with_object({}) do |node, nested_data|
         node.children.each do |child|
@@ -104,6 +164,10 @@ module RssFeed
       end
     end
 
+    # Extract attributes from the XML document.
+    #
+    # @param node [Object] The XML node.
+    # @return [Array<Hash>] The extracted attributes.
     def extract_attributes(node)
       node.map do |thumbnail|
         attributes_hash = {}

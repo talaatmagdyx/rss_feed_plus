@@ -6,7 +6,7 @@ module RssFeed
     attr_reader uri_parser: untyped
     attr_reader xml_parser: Nokogiri | untyped
 
-    def initialize: (feed_urls: Array[String]) -> void
+    def initialize: (feed_urls: String) -> void
 
     def parse: -> DynamicObject
 
