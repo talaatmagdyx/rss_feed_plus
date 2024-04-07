@@ -49,8 +49,7 @@ module RssFeed
     # @param channel [RssFeed::Feed::Channel] The channel object.
     # @return [Hash] The extracted channel information.
     def extract_channel_info(channel)
-      channel_tags = channel.parse
-      extract_info(channel, channel_tags)
+      extract_info(channel, channel.parse)
     end
 
     # Extract item information from the parsed XML document.
@@ -58,11 +57,7 @@ module RssFeed
     # @param items [RssFeed::Feed::Item] The items object.
     # @return [Array<Hash>] The extracted item information.
     def extract_item_info(items)
-      item_info = []
-      items.parse.each do |item|
-        item_info << extract_info(items, item)
-      end
-      item_info
+      items.parse.map { |item| extract_info(items, item) }
     end
 
     # Extract information from the XML document based on specified tags.
@@ -91,7 +86,7 @@ module RssFeed
     # @param tag_data [Hash] The tag data.
     # @return [Boolean] True if extraction should be skipped, otherwise false.
     def skip_extraction?(tag_data)
-      tag_data[:text].blank? && tag_data[:nested_elements].blank? && tag_data[:nested_attributes].blank?
+      tag_data.values_at(:text, :nested_elements, :nested_attributes).all?(&:blank?)
     end
 
     # Check if extraction of items should be skipped.
@@ -109,9 +104,7 @@ module RssFeed
     # @param tag_data [Hash] The tag data.
     # @return [Hash] The item information.
     def create_item_info(items, tag_data)
-      item_info = { 'values' => items }
-      add_attributes(item_info, tag_data)
-      item_info
+      { 'values' => items, 'attributes' => tag_data[:attributes] }.compact
     end
 
     # Extract tag data from the XML document.
@@ -138,8 +131,7 @@ module RssFeed
     # @param tag_item [Hash] The item information hash.
     # @param tag_data [Hash] The tag data.
     def add_attributes(tag_item, tag_data)
-      attributes = tag_data[:attributes]
-      tag_item['attributes'] = attributes if attributes.present?
+      tag_item['attributes'] = tag_data[:attributes] if tag_data[:attributes].present?
     end
 
     # Extract clean value from the XML document.
@@ -147,8 +139,7 @@ module RssFeed
     # @param docs [Object] The XML document.
     # @return [String] The extracted clean value.
     def extract_clean_value(docs)
-      clean_value = RssFeed::Feed::Namespace.remove_html_tags(docs)
-      clean_value if clean_value.present?
+      RssFeed::Feed::Namespace.remove_html_tags(docs).presence
     end
 
     # Extract nested data from the XML document.
