@@ -38,6 +38,10 @@ module RssFeed
       { 'channel' => channel_info, 'items' => item_info }
     end
 
+    def parse_as_object
+      DynamicObject.new(parse)
+    end
+
     private
 
     # Fetch and parse XML data from the given URL.

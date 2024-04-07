@@ -21,7 +21,10 @@ timeout = 10
 parser = RssFeed::Parser.new(feed_urls, xml_parser: xml_parser, uri_parser: uri_parser, timeout: timeout)
 
 # Parse the RSS feeds
-parsed_data = parser.parse
+# parsed_data = parser.parse
 
 # Process the parsed data
+# puts parsed_data.inspect
+
+parsed_data = parser.parse_as_object
 puts parsed_data.inspect
