@@ -30,6 +30,7 @@ module RssFeed
         '//entry'
       end
 
+      alias feed atom
       # Parses the RSS item or Atom entry based on the detected feed type.
       #
       # @return [Nokogiri::XML::NodeSet] The parsed item or entry.

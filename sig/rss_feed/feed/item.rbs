@@ -5,6 +5,8 @@ module RssFeed
 
       def atom: -> String
 
+      alias feed atom
+
       def parse: -> Nokogiri::XML::NodeSet
 
       def rss: -> String
