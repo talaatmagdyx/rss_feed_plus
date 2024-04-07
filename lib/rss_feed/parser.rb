@@ -14,7 +14,7 @@ module RssFeed
 
     # Initialize the Parser with a list of feed URLs.
     #
-    # @param feed_urls [Array<String>] The URLs of the RSS feeds to parse.
+    # @param feed_urls String The URLs of the RSS feeds to parse.
     def initialize(feed_urls)
       @feed_urls = feed_urls
     end
