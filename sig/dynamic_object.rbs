@@ -1,0 +1,9 @@
+class DynamicObject
+  def initialize: (data: JSON)-> void
+
+  private
+
+  def process_array: -> Array[untyped]
+
+  def set_instance_variable: (key: String, value: untyped)-> void
+end

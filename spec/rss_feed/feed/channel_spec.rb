@@ -11,7 +11,7 @@ RSpec.describe RssFeed::Feed::Channel do
     end
 
     it 'returns the XPath expression for selecting the RSS channel' do
-      channel = described_class.new(Nokogiri::XML(channel_xml)) # Pass nil for document as it's not required for this test
+      channel = described_class.new(Nokogiri::XML(channel_xml))
       expect(channel.rss).to eq('//channel')
     end
   end
@@ -23,7 +23,7 @@ RSpec.describe RssFeed::Feed::Channel do
     end
 
     it 'returns the XPath expression for selecting the Atom feed' do
-      channel = described_class.new(Nokogiri::XML(channel_xml)) # Pass nil for document as it's not required for this test
+      channel = described_class.new(Nokogiri::XML(channel_xml))
       expect(channel.atom).to eq('//feed')
     end
   end

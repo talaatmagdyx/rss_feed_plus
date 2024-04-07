@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'rss_feed'
 
 RSpec.configure do |config|

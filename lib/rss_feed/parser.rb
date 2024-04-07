@@ -50,22 +50,29 @@ module RssFeed
 
       feed.class::TAGS.each do |tag|
         tag_data = extract_tag_data(tag, feed_parse)
-        next if tag_data[:text].blank? && tag_data[:nested_elements].blank? && tag_data[:nested_attributes].blank?
+        next if skip_extraction?(tag_data)
 
         items = extract_items(tag_data)
-        # if tag == 'media:thumbnail'
-        #   puts "items: #{items}"
-        #   puts "tags: #{tag}"
-        # end
+        next if skip_items?(items, tag_data[:nested_attributes])
 
-        next if items.blank? && tag_data[:nested_attributes].blank?
-
-        item_info = { 'values' => items }
-        add_attributes(item_info, tag_data) # Add attributes to the item_info hash
-        item_data[tag] = item_info.compact
+        item_data[tag] = create_item_info(items, tag_data)
       end
 
       item_data
+    end
+
+    def skip_extraction?(tag_data)
+      tag_data[:text].blank? && tag_data[:nested_elements].blank? && tag_data[:nested_attributes].blank?
+    end
+
+    def skip_items?(items, nested_attributes)
+      items.blank? && nested_attributes.blank?
+    end
+
+    def create_item_info(items, tag_data)
+      item_info = { 'values' => items }
+      add_attributes(item_info, tag_data)
+      item_info
     end
 
     def extract_tag_data(tag, feed_parse)
@@ -81,7 +88,6 @@ module RssFeed
     def add_attributes(tag_item, tag_data)
       attributes = tag_data[:attributes]
       tag_item['attributes'] = attributes if attributes.present?
-
     end
 
     def extract_clean_value(docs)

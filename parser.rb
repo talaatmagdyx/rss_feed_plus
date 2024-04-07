@@ -2,10 +2,10 @@ require 'rss_feed'
 require 'nokogiri'
 require 'open-uri'
 
-url = 'https://feeds.nbcnews.com/nbcnews/public/news'
-url = 'https://abcnews.go.com/abcnews/usheadlines'
-url = "https://feeds.nbcnews.com/nbcnews/public/news"
-url = "https://www.ruby-lang.org/en/feeds/news.rss"
+# url = 'https://feeds.nbcnews.com/nbcnews/public/news'
+# url = 'https://abcnews.go.com/abcnews/usheadlines'
+# url = 'https://feeds.nbcnews.com/nbcnews/public/news'
+url = 'https://www.ruby-lang.org/en/feeds/news.rss'
 rss = RssFeed::Parser.new(url).parse
 p rss
 # def fetch_and_parse_xml(url)
@@ -22,6 +22,3 @@ p rss
 #     puts "#{name}: #{value}"
 #   end
 # end
-
-
-

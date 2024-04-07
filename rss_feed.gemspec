@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'lib/rss_feed/version'
 
 Gem::Specification.new do |spec|

@@ -7,3 +7,5 @@ AllCops:
   NewCops: enable
 Style/FrozenStringLiteralComment:
   EnforcedStyle: never
+Style/Documentation:
+  Enabled: false
