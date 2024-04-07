@@ -68,8 +68,6 @@ module RssFeed
       { open_timeout: @timeout, read_timeout: @timeout }.compact
     end
 
-
-
     # Extract channel information from the parsed XML document.
     #
     # @param channel [RssFeed::Feed::Channel] The channel object.
@@ -197,15 +195,14 @@ module RssFeed
 
     def handle_error(error)
       error_message = "Error occurred: #{error.message}"
-      @logger.present? ? @logger.error(error_message) : puts(error_message) # Fallback to puts if logger is not configured
+      # Fallback to puts if logger is not configured
+      @logger.present? ? @logger.error(error_message) : puts(error_message)
     end
 
     def configure_logger
       @logger ||= Logger.new($stdout)
       @logger.level = Logger::INFO
     end
-
-
   end
 
   class RssFetchError < StandardError; end

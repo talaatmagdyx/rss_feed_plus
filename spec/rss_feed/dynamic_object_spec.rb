@@ -8,7 +8,6 @@ RSpec.describe DynamicObject do
         dynamic_object = described_class.new(data)
 
         expect(dynamic_object.name).to eq('John')
-
       end
 
       it 'initializes with correct attributes # age', :only do

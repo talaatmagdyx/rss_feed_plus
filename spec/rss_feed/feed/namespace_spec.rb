@@ -21,7 +21,6 @@ RSpec.describe RssFeed::Feed::Namespace do
     it 'returns the tag data nested attributes flag' do
       expect(tag_data[:nested_attributes]).to be_falsey
     end
-
   end
 
   describe '.namespace' do
@@ -58,6 +57,5 @@ RSpec.describe RssFeed::Feed::Namespace do
       p node
       expect(described_class).to be_nested_attributes(node)
     end
-
   end
 end

@@ -6,10 +6,9 @@ require 'nokogiri'
 # # url = 'https://feeds.nbcnews.com/nbcnews/public/news'
 # # url = 'https://abcnews.go.com/abcnews/usheadlines'
 # url = 'https://feeds.nbcnews.com/nbcnews/public/news'
-url = 'https://www.ruby-lang.org/en/feeds/news.rss'
+# url = 'https://www.ruby-lang.org/en/feeds/news.rss'
 # rss = RssFeed::Parser.new(url).parse
 # p rss
-
 
 # Define your custom options
 feed_urls = 'https://feeds.nbcnews.com/nbcnews/public/news'
