@@ -1,7 +1,7 @@
 require_relative 'lib/rss_feed/version'
 
 Gem::Specification.new do |spec|
-  spec.name = 'rss_feed'
+  spec.name = 'rss_feed_plus'
   spec.version = RssFeed::VERSION
   spec.authors = ['talaatmagdyx']
   spec.email = ['talaatmagdy75@gmail.com']
@@ -14,15 +14,15 @@ Gem::Specification.new do |spec|
     With #{spec.name}, you can quickly integrate RSS feed parsing functionality into your Ruby projects,#{' '}
     making it easy to work with syndicated content from various sources.
   DESC
-  spec.homepage = 'https://github.com/talaatmagdyx/rss_feed'
+  spec.homepage = 'https://github.com/talaatmagdyx/rss_feed_plus'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 2.6.0'
 
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/talaatmagdyx/rss_feed'
-  spec.metadata['changelog_uri'] = 'https://github.com/talaatmagdyx/rss_feed/blob/main/CHANGELOG.md'
-  spec.metadata['bug_tracker_uri'] = 'https://github.com/talaatmagdyx/rss_feed/issues'
-  spec.metadata['wiki_uri'] = 'https://github.com/talaatmagdyx/rss_feed/wiki'
+  spec.metadata['source_code_uri'] = 'https://github.com/talaatmagdyx/rss_feed_plus'
+  spec.metadata['changelog_uri'] = 'https://github.com/talaatmagdyx/rss_feed_plus/blob/main/CHANGELOG.md'
+  spec.metadata['bug_tracker_uri'] = 'https://github.com/talaatmagdyx/rss_feed_plus/issues'
+  spec.metadata['wiki_uri'] = 'https://github.com/talaatmagdyx/rss_feed_plus/wiki'
   spec.post_install_message = "Thanks for installing! #{spec.name} is a simple RSS parser gem for Ruby."
   spec.platform = Gem::Platform::RUBY
 
