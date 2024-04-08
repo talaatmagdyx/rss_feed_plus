@@ -93,7 +93,7 @@ module RssFeed
       item_data = {}
 
       feed.class::TAGS.each do |tag|
-        tag_data = extract_tag_data(tag, feed_parse)
+        tag_data = extract_tag_data(tag, feed_parse, feed)
         next if skip_extraction?(tag_data)
 
         items = extract_items(tag_data)
@@ -136,8 +136,8 @@ module RssFeed
     # @param tag [String] The tag to extract.
     # @param feed_parse [Hash] The parsed XML data.
     # @return [Hash] The extracted tag data.
-    def extract_tag_data(tag, feed_parse)
-      value = RssFeed::Feed::Namespace.access_tag(tag, feed_parse)
+    def extract_tag_data(tag, feed_parse, feed)
+      value = RssFeed::Feed::Namespace.access_tag(tag, feed_parse, feed)
       value[:attributes] = extract_attributes(value[:docs]) if value[:nested_attributes]
       value
     end

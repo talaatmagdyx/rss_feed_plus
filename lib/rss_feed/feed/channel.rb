@@ -17,7 +17,8 @@ module RssFeed
         image logo icon rating
         rights copyright
         textInput feedburner:browserFriendly
-        itunes:author itunes:category
+        itunes:author itunes:category category itunes:explicit itunes:image itunes:keywords itunes:owner itunes:subtitle
+        itunes:summary
       ].freeze
 
       # XPath expression for selecting the RSS channel.
@@ -31,7 +32,7 @@ module RssFeed
       def atom
         return nil if document.blank?
 
-        '//feed'
+        '//xmlns:feed'
       end
 
       alias feed atom

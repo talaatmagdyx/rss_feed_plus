@@ -18,8 +18,6 @@ module RssFeed
         raise NotImplementedError
       end
 
-      private
-
       # Detects the type of the feed based on the root element of the XML document.
       #
       # @return [String] The name of the root element.
