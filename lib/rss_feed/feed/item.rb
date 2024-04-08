@@ -27,7 +27,7 @@ module RssFeed
 
       # XPath expression for selecting the Atom entry.
       def atom
-        '//entry'
+        '//xmlns:entry'
       end
 
       alias feed atom

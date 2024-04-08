@@ -12,7 +12,9 @@ module RssFeed
         'feedburner' => 'http://rssnamespace.org/feedburner/ext/1.0',
         'content' => 'http://purl.org/rss/1.0/modules/content/',
         'trackback' => 'http://example.com/trackback',
-        'media' => 'http://search.yahoo.com/mrss/'
+        'media' => 'http://search.yahoo.com/mrss/',
+        'atom' => 'http://www.w3.org/2005/Atom',
+        'xmlns' => 'http://www.w3.org/2005/Atom'
       }.freeze
 
       class << self
@@ -21,8 +23,9 @@ module RssFeed
         # @param tag [String] The XML tag to access.
         # @param doc [Nokogiri::XML::Document] The XML document.
         # @return [Hash] The tag data including text, nested elements flag, nested attributes flag, and the document.
-        def access_tag(tag, doc)
-          doc = doc.xpath(tag, namespace(tag))
+        def access_tag(tag, doc, feed)
+          feed_tag = %w[atom feed].include?(feed.detect_feed_type) && namespace(tag).blank? ? "xmlns:#{tag}" : tag
+          doc = doc.xpath(feed_tag, namespace(tag))
           nested_elements = nested_elements?(doc)
           { text: doc.to_s, nested_elements: nested_elements, nested_attributes: nested_attributes?(doc), docs: doc }
         end
@@ -33,7 +36,7 @@ module RssFeed
         # @return [Hash] The namespace declaration.
         def namespace(tag)
           namespace_key = tag.split(':').first
-          { namespace_key.to_s => NAMESPACES[namespace_key] }.compact
+          NAMESPACES[namespace_key].blank? ? nil : { namespace_key.to_s => NAMESPACES[namespace_key] }.compact
         end
 
         # Removes HTML tags from the given content.

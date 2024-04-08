@@ -5,7 +5,7 @@ module RssFeed
 
       def self.access_tag: (tag: String, doc: Nokogiri::XML::NodeSet)-> Hash[Symbol, bool | String | Nokogiri::XML::Document ]
 
-      def self.namespace: (tag: String)-> Hash[String, String]
+      def self.namespace: (tag: String)-> Hash[String, String] | nil
 
       def self.nested_attributes?:  (node: Nokogiri::XML::NodeSet) -> bool
 

@@ -7,8 +7,6 @@ module RssFeed
 
       def parser: -> Nokogiri::XML::Document
 
-      private
-
       def detect_feed_type: -> String
 
 
