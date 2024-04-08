@@ -49,7 +49,10 @@ parser = RssFeed::Parser.new(feed_urls, xml_parser: xml_parser, uri_parser: uri_
 # or 
 parser = RssFeed::Parser.new(feed_urls)
 # Parse the RSS feeds
-parsed_data = parser.parse_as_object
+parsed_data = parser.parse_as_object 
+
+# OR  Parse the RSS feed as a JSON
+parsed_data = parser.parse
 
 # Process the parsed data
 puts parsed_data.inspect
