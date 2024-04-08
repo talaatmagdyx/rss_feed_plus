@@ -46,7 +46,8 @@ timeout = 10
 
 # Initialize the Parser class with custom options
 parser = RssFeed::Parser.new(feed_urls, xml_parser: xml_parser, uri_parser: uri_parser, timeout: timeout)
-
+# or 
+parser = RssFeed::Parser.new(feed_urls)
 # Parse the RSS feeds
 parsed_data = parser.parse_as_object
 
