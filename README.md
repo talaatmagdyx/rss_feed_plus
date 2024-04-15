@@ -57,7 +57,9 @@ parsed_data = parser.parse
 # Process the parsed data
 puts parsed_data.inspect
 ```
-
+## Example 
+- [rss-cli-example](https://github.com/talaatmagdyx/rss-cli-example)
+  
 ## Customization
 
 **rss_feed_plus** allows you to tailor the parsing process to fit your needs. Customize the XML parser, URI parser, and timeout duration according to your requirements.
